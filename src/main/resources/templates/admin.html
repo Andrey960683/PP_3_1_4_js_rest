@@ -2,45 +2,56 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User</title>
+    <title>All Users</title>
     <style>table th, table td {
         padding: 5px;
     }</style>
 </head>
-<h2>User Info</h2>
 <body>
+<h2>All Users</h2>
 <table border="1">
     <tr>
         <th>Id</th>
         <th>Name</th>
         <th>Surname</th>
         <th>Age</th>
-        <th>Back</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>View user</th>
         <th>Edit user</th>
         <th>Delete user</th>
 
     </tr>
-    <tr>
+    <tr th:each="user : ${users}">
         <td th:utext="${user.getId()}">id</td>
         <td th:utext="${user.getName()}">name</td>
-        <td th:utext="${user.getSurname()}">surname</td>
+        <td th:utext="${user.getSurname}">surname</td>
         <td th:utext="${user.getAge()}">age</td>
+        <td th:utext="${user.getUsername()}">Username</td>
+
         <td>
-            <a href="/users/">Back</a>
+            <form th:method="GET" th:action="@{/users/show?id={id}}">
+                <input type="hidden" name="id" th:value="${user.getId()}"/>
+                <input type="submit" value="View"/>
+            </form>
 
         </td>
         <td>
-            <form th:method="GET" th:action="@{/users/edit?id={id}}">
+            <form th:method="GET" th:action="@{/admin/edit}">
                 <input type="hidden" name="id" th:value="${user.getId()}"/>
                 <input type="submit" value="Edit"/>
             </form>
         </td>
         <td>
-            <form th:method="POST" th:action="@{/users/delete?id={id}(id=${user.getId()})}">
+            <form th:method="POST" th:action="@{/admin/delete?id={id}(id=${user.getId()})}">
                 <input type="submit" value="Delete"/>
             </form>
         </td>
     </tr>
 </table>
+<p></p>
+<form th:method="GET" th:action="@{/admin/new}">
+    <input type="submit" value="Add User"/>
+</form>
 </body>
 </html>
