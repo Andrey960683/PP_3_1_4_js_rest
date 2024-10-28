@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New User</title>
+</head>
+<body>
+<h2>Новый пользователь</h2>
+<br>
+<form th:method="POST" th:action="@{/admin/new}" th:object="${user}">
+
+    <label for="name">Имя</label>
+    <input type="text" name="name" id="name"/>
+    <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+    <br>
+    <label for="surname">Фамилия</label>
+    <input type="text" name="surname" id="surname"/>
+    <div style="color: red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname error</div>
+    <br>
+    <label for="age">Возраст</label>
+    <input type="number" name="age" id="age"/>
+    <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
+    <br>
+    <label for="username">Логин</label>
+    <input type="text" name="username" id="username"/>
+    <div style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
+    <br>
+    <label for="password">Пароль</label>
+    <input type="text" name="password" id="password"/>
+    <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+    <br>
+    <p>
+        <label for="roleAdmin">Назначить админиом</label>
+        <input type="checkbox" name="roleAdmin" id="roleAdmin">
+    </p>
+    <br>
+    <input type="submit" value="Создать"/>
+    <br>
+    <form th:method="GET" th:action="@{/admin/}">
+        <input type="submit" value="Назад"/>
+    </form>
+</form>
+<p></p>
+<button class="buttonLogout" onclick="window.location.href = '/logout';">Выход</button>
+</body>
+</html>

@@ -20,8 +20,8 @@ public class Role implements Serializable, GrantedAuthority {
     @Column(name = "role_name", unique = true)
     private String roleName;
 
-    @ManyToMany(mappedBy = "roleSet",
-            fetch = FetchType.LAZY )
+
+    @ManyToMany(mappedBy = "roleSet",fetch = FetchType.LAZY )
     private Set<User> usersSet;
 
     public Role() {

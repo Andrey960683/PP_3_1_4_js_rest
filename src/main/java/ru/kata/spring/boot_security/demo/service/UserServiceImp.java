@@ -10,8 +10,6 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
-
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,8 +21,8 @@ public class UserServiceImp implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserServiceImp(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+   @Autowired
+    public UserServiceImp(RoleRepository roleRepository, UserRepository userRepository,PasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -44,29 +42,36 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional
-    public void addUser(User user) {
+    public void addUser(User user,String roleAdmin) {
         User userFromDB = userRepository.findByUsername(user.getUsername()).orElse(null);
         if (userFromDB == null) {
             Set<Role> roles = new HashSet<>();
-            if (roleRepository.findByRoleName("ROLE_USER").isEmpty()) {
-                roles.add(new Role(1, "ROLE_USER"));
-            }
-            if (roleRepository.findByRoleName("ROLE_ADMIN").isEmpty()) {
-                roles.add(new Role(2, "ROLE_ADMIN"));
+            roles.add(roleRepository.getById(1));
+            if (roleAdmin!=null){
+                roles.add(roleRepository.getById(2));
             }
             user.setRoleSet(roles);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+           user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
         }
     }
 
     @Override
     @Transactional
-    public void editUser(int id, User userUpdate) {
+    public void editUser(int id, User userUpdate,String roleAdmin) {
         userUpdate.setId(id);
         userUpdate.setPassword(passwordEncoder.encode(userUpdate.getPassword()));
-        User userFromDB = (User)loadUserByUsername(userUpdate.getUsername());
-        userRepository.save(userFromDB);
+        User userFromDB = userRepository.findById(id).orElse(null);
+        if (userFromDB==null){
+            throw new UsernameNotFoundException("User not found");
+        }
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleRepository.getById(1));
+        if (roleAdmin!=null){
+            roles.add(roleRepository.getById(2));
+        }
+        userUpdate.setRoleSet(roles);
+        userRepository.save(userUpdate);
     }
 
     @Override
@@ -75,12 +80,15 @@ public class UserServiceImp implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElse(null);
-        if (user==null){
+    public User findUsername(String username){
+        User userFromDB = userRepository.findByUsername(username).orElse(null);
+        if (userFromDB==null){
             throw new UsernameNotFoundException("User not found");
         }
-        return user;
+       return userFromDB;
     }
+
+
+
+
 }
