@@ -31,6 +31,8 @@
 
     </tr>
 </table>
-<button class="buttonLogout" onclick="window.location.href = '/logout';">Выход</button>
+<form th:method="GET" th:action="@{/logout}">
+    <input type="submit" value="Выход"/>
+</form>
 </body>
 </html>

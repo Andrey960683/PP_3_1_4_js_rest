@@ -34,13 +34,16 @@
     <input type="checkbox" name="roleAdmin" id="roleAdmin">
   </p>
   <br>
-  <input type="submit" value="Edit"/>
+  <input type="submit" value="Изменить"/>
   <br>
+  <p></p>
   <form th:method="GET" th:action="@{/admin/}">
     <input type="submit" value="Назад"/>
   </form>
 </form>
 <p></p>
-<button class="buttonLogout" onclick="window.location.href = '/logout';">Выход</button>
+<form th:method="GET" th:action="@{/logout}">
+  <input type="submit" value="Выход"/>
+</form>
 </body>
 </html>
