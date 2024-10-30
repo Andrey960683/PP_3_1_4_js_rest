@@ -1,9 +1,14 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -21,30 +26,35 @@ public class User implements Serializable, UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotEmpty(message = "Name should not be empty")
-    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
+    @NotEmpty(message = "Имя не должно быть пустым")
+    @Size(min = 2, max = 30, message = "Имя может состоять от 2 до 30 символов")
     @Column(name = "name")
     private String name;
 
-    @NotEmpty(message = "Surname should not be empty")
-    @Size(min = 2, max = 50, message = "Surname should be between 2 and 50 characters")
+    @NotEmpty(message = "Фамилия не должна быть пустой")
+    @Size(min = 2, max = 50, message = "Фамилия может состоять от 2 до 50 символов")
     @Column(name = "surname")
     private String surname;
 
-    @Min(value = 1, message = "Age should be greater than 0")
+
+    @Min(value = 1, message = "Укажите корректный возраст")
     @Column(name = "age")
     private int age;
 
-    @NotEmpty(message = "Username should not be empty")
-    @Size(min = 2, max = 30, message = "Username should be between 2 and 30 characters")
-    @Column(name = "username",unique = true)
-    private String username;
+    @NotEmpty(message = "Логин не может быть пстым")
+    @Size(min = 2, max = 30, message = "Логин может состоять от 2 до 30 символов")
+    @Email(message = "Email некорректный")
+    @Column(name = "email",unique = true)
+    private String email;
 
-    @NotEmpty(message = "The password should not be missing")
+    @NotEmpty(message = "Пороль не может быть пустым")
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @NotEmpty
+    @ManyToMany(fetch = FetchType.LAZY)
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -54,11 +64,11 @@ public class User implements Serializable, UserDetails {
 
     public User() {}
 
-    public User(String name, String surname, int age, String password, String username) {
+    public User(String name, String surname, int age, String password, String email) {
         this.name = name;
         this.surname = surname;
         this.age = age;
-        this.username = username;
+        this.email = email;
         this.password = password;
     }
 
@@ -96,11 +106,15 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail (String email) {
+        this.email = email;
     }
 
     @Override
