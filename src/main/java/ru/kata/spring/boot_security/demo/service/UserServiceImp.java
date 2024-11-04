@@ -37,7 +37,6 @@ public class UserServiceImp implements UserService {
     @Override
     @Transactional
     public void addUser(User user) throws NumberFormatException {
-        System.out.println("------------");
         User userFromDB = userRepository.findByEmail(user.getUsername()).orElse(null);
         if (userFromDB == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
