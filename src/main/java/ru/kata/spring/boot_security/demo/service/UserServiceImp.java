@@ -46,13 +46,8 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional
-    public void editUser(int id, User userUpdate) {
-        userUpdate.setId(id);
+    public void editUser( User userUpdate) {
         userUpdate.setPassword(passwordEncoder.encode(userUpdate.getPassword()));
-        User userFromDB = userRepository.findById(id).orElse(null);
-        if (userFromDB==null) {
-            throw new UsernameNotFoundException("User not found");
-        }
         userRepository.save(userUpdate);
    }
 

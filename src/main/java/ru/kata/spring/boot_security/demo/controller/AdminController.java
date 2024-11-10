@@ -60,7 +60,7 @@ public class AdminController {
     public String update(@RequestParam("id") int id, @ModelAttribute("user") @Valid User user, Model model) {
         model.addAttribute("roles", roleService.getRoles());
         model.addAttribute("roleSet", user.getRoleSet());
-        userServiceImp.editUser(id, user);
+        userServiceImp.editUser(user);
         return "redirect:/admin";
     }
 
