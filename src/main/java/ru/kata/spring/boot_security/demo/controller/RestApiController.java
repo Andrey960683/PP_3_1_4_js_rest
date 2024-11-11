@@ -48,8 +48,8 @@ public class RestApiController {
 
     @PutMapping("/admin/update")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
-            userServiceImp.editUser(user);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
+        userServiceImp.editUser(user);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
     }
 
     @DeleteMapping("/admin/delete/{id}")
@@ -70,6 +70,4 @@ public class RestApiController {
     public ResponseEntity<User> showUser(@AuthenticationPrincipal User user) {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
-
-
 }

@@ -184,8 +184,8 @@ async function updateUser() {
             }),
         })
             .then(() => {
-                getAllUsers();
                 $('#editFormCloseButton').click();
+                getAllUsers();
             });
     });
 }
@@ -234,7 +234,7 @@ async function deleteUser() {
             }
         }).then(() => {
 
-            getAllUsers().userTable.empty();;
+            getAllUsers();
             $('#deleteFormCloseButton').click();
         })
     });
